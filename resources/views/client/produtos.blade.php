@@ -11,20 +11,33 @@
                     @foreach($dados as $produto)
                     <div class="col-lg-4 col-sm-6 col-12">
                             <div class="card shadow p-3 mb-5 bg-white rounded">
+                                @if($produto->disponivel == 1)
                                 <a href="{{route('produto', $produto->id)}}" style="text-decoration: none">
+                                    @else
+                                        <a style="text-decoration: none">
+                                            @endif
                                 <div class="card-header" style="padding: 5px; height: 300px">
                                     <img src="{{asset($produto->foto_um)}}" width="100%" height="200px" style="object-fit: cover; object-position: center">
                                     <h6 style="margin: 5px; text-align: justify; color: dimgray;">{{$produto->nome}}</h6>
                                 </div>
-                                <div class="card-body" style="padding: 5px;">
-                                    <p style="margin: 0; padding: 0; font-size: 30px; color: darkslategray; font-weight: bold">R$ {{$produto->preco}}</p>
+
+                                            <div class="card-body" style="padding: 5px;">
+                                                @if($produto->disponivel == 1)
+                                                <p style="margin: 0; padding: 0; font-size: 30px; color: darkslategray; font-weight: bold">R$ {{$produto->preco}}</p>
                                     <p style="margin: 0; padding: 0; color: grey">Até 10x no cartão</p>
                                     <p style="margin: 0; padding: 0; color: grey">1+5 Crediário</p>
                                     <p style="margin: 0; padding: 0; color: grey">À vista</p>
+                                                    @else
+                                                    <p style="margin: 0; padding: 0; color: darkslategray; height: 117px; padding: 5px">Ops! Já vendemos todo o estoque.</p>
+                                                @endif
                                 </div>
                                 </a>
                                 <div class="card-footer" align="center" style="padding: 5px">
-                                    <button onclick="quantidade({{$produto->id}}, '{{$produto->nome}}')" data-toggle="modal" data-target="#exampleModal"   class="btn btn-danger" style="width: 100%">Adicionar &nbsp;&nbsp;<i class="fas fa-cart-plus"></i></button>
+                                    @if($produto->disponivel == 1)
+                                        <button onclick="quantidade({{$produto->id}}, '{{$produto->nome}}')" data-toggle="modal" data-target="#exampleModal"   class="btn btn-danger" style="width: 100%">Adicionar &nbsp;&nbsp;<i class="fas fa-cart-plus"></i></button>
+                                    @else
+                                        <button class="btn btn-danger disabled" style="width: 100%">Indisponível</button>
+                                    @endif
                                 </div>
                             </div>
                     </div>

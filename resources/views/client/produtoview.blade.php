@@ -30,15 +30,23 @@
                     </h6>
                        <div class="container" style="margin-top: 50px">
                            <div class="col-lg-8 col-12  float-left">
+
+                               @if($produto->disponivel ==1)
                                <h1 style="color: #1b4b72; font-weight: bold">R$ {{$produto->preco}}</h1>
                                <p style="margin: 0; padding: 0; color: grey">Até 10x no cartão</p>
                                <p style="margin: 0; padding: 0; color: grey">1+5 Crediário</p>
                                <p style="margin: 0; padding: 0; color: grey">À vista</p>
+                                   @else
+                                   <p style="margin: 0; padding: 0; color: darkslategray; height: 117px; padding: 5px">Ops! Já vendemos todo o estoque.</p>
+
+                               @endif
 
                            </div>
+                           @if($produto->disponivel ==1)
                            <div class="col-lg-4 col-12 float-right">
                                <button onclick="quantidade({{$produto->id}}, '{{$produto->nome}}')" data-toggle="modal" data-target="#exampleModal"   class="btn btn-danger" style="width: 100%; margin-bottom: 20px; margin-top: 10px">Adicionar ao Carrinho&nbsp;&nbsp;<i class="fas fa-cart-plus"></i></button>
                            </div>
+                               @endif
                        </div>
 
                 </div>

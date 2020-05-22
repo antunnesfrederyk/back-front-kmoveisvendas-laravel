@@ -23,10 +23,9 @@ class CreateProdutosTable extends Migration
             $table->string('foto_um')->nullable();
             $table->string('foto_dois')->nullable();
             $table->string('foto_tres')->nullable();
-
+            $table->integer('disponivel')->default(1);
             $table->bigInteger('id_categoria')->unsigned();
             $table->foreign('id_categoria')->references('id')->on('categorias')->onDelete('cascade');
-
             $table->bigInteger('id_user')->unsigned();
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
 

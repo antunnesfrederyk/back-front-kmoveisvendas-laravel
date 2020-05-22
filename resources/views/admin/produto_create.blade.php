@@ -19,10 +19,20 @@
                         @csrf
                         <div class="row">
 
-                            <div class="col-12">
+                            <div class="col-9">
                                <label for="nome">*Nome</label>
                                <input class="form-control" maxlength="100" type="text" id="nome" name="nome" required>
                            </div>
+
+
+                            <div class="col-3">
+                                <label for="disponivel">*Disponível?</label>
+                                <select class="form-control" name="disponivel" id="disponivel" required>
+                                        <option selected value="1">Sim</option>
+                                        <option value="0">Não</option>
+                                </select>
+                            </div>
+
                            <div class="col-12">
                                <label for="descricao">Descrição</label>
                                <textarea class="form-control" id="descricao" name="descricao" rows="4"></textarea>
