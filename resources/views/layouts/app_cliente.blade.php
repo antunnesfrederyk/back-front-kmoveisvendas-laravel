@@ -19,58 +19,95 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body style="background-color: lightblue">
+<body style="background-image: linear-gradient(to bottom right, red, yellow);">
     <div id="app">
-        <nav class="navbar navbar-light bg-white shadow-sm fixed-top">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                   <img src="{{asset('brasao.png')}}" height="45px">
-                   <img class="ml-2" src="{{asset('rede.png')}}" height="40px">
-                </a>
 
-
-
-
-
-{{--                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">--}}
-{{--                    <span class="navbar-toggler-icon"></span>--}}
-{{--                </button>--}}
-
+        <nav class="d-lg-none navbar navbar-light bg-white fixed-top">
+            <a class="navbar-brand" href="{{ url('/') }}">
+               <img src="{{asset('brasao.png')}}" height="45px">
+               <img class="ml-2" src="{{asset('rede.png')}}" height="40px">
+            </a>
             <a href="{{route('carrinho')}}" class="navbar-toggler pt-2 pb-2">
                 <div align="center">
                     <i style="font-size: 15px;" class="fa fa-shopping-cart"></i>
                     <p class="p-0 pt-1 m-0" style="font-size: 10px">Carrinho</p>
                 </div>
             </a>
-
-
-{{--                <div class="collapse navbar-collapse" id="navbarSupportedContent">--}}
-{{--                    <!-- Left Side Of Navbar -->--}}
-{{--                    <ul class="navbar-nav">--}}
-
-{{--                    </ul>--}}
-
-{{--                    @auth--}}
-{{--                        <a href="{{route("home")}}" class="btn btn-dark m-1">--}}
-{{--                            Painel--}}
-{{--                        </a>--}}
-{{--                    @endauth--}}
-
-{{--                    <!-- Right Side Of Navbar -->--}}
-
-{{--                    <ul class="navbar-nav ml-auto">--}}
-{{--                        <a class="nav-link" href="tel:+5583999900364"><i class="fa fa-phone"></i>--}}
-{{--                            <span style="font-weight: bold">Entre em Contato</span></a>--}}
-{{--                        <a class="nav-link" href="{{route('carrinho')}}"><i class="fa fa-cart-plus"></i>--}}
-{{--                            <span style="font-weight: bold">{{\App\Http\Controllers\ClienteController::pegarcarrinho()}} Itens</span></a>--}}
-{{--                    </ul>--}}
-{{--                </div>--}}
         </nav>
-        <main class="py-4" style="padding: 10px; margin-top: 52px">
-            <div class="container">
-                @include('flash::message')
+
+        <div class="d-none d-lg-block bg-white pt-2 pl-2 fixed-top" id="buscar">
+            <form action="{{route('buscar')}}" method="GET">
+                <div class="row">
+                    <div class="col-3">
+                        <a class="navbar-brand" href="{{ url('/') }}">
+                        <img src="{{asset('brasao.png')}}" height="70px">
+                        <img class="ml-2" src="{{asset('rede.png')}}" height="40px">
+                        </a>
+                    </div>
+                    <div class="col-5 form-inline">
+                        <input type="search" name="produto" class="form-control w-75" style="float: left" placeholder="Buscar produtos...">
+                        <button type="submit" class="btn btn-dark ml-1"><i class="fa fa-search"></i></button>
+                    </div>
+                    <div class="dropdown show col-2 w-100 form-inline">
+                        <a class="btn btn-primary dropdown-toggle w-100" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Categorias
+                        </a>
+                        <div class="dropdown-menu mt-5" aria-labelledby="dropdownMenuLink">
+                            @foreach(\App\CategoriaModel::all() as $categoria)
+                                <a class="dropdown-item" href="{{route('listarporcategoria', $categoria->id)}}">{{$categoria->nome}}</a>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="col-2 w-100 float-right">
+                        <a href="{{route('carrinho')}}" class="btn btn-lg pt-2 pb-2 float-right">
+                            <div align="center" class="btn btn-success text-white">
+                                <i style="font-size: 15px;" class="fa fa-shopping-cart"></i>
+                                <p class="p-0 pt-0 m-0" style="font-size: 10px">Carrinho</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="row mt-lg-3" style="display: none" id="slide">
+            <div class="col-12">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        @php($cont = 0 )
+                        @foreach($banners as $banner)
+                            @if($cont ==0)
+                                @php($cont = 1 )
+                                <div class="carousel-item active">
+                            @else
+                                 <div class="carousel-item">
+                            @endif
+                            <img class="d-block w-100" style="max-height: 220px; object-fit: contain" src="{{asset($banner->foto)}}" alt="{{$banner->titulo}}">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h1>{{$banner->titulo}}</h1>
+                                <p>{{$banner->descricao}}</p>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Próximo</span>
+                    </a>
+                </div>
             </div>
+        </div>
+
+        <div class="d-lg-none">
             <div align="center" class="container" style="padding: 0">
-                <div class="card shadow p-2 mb-0 bg-white rounded col-12" style="padding: 10px; margin: 0" align="left">
+                <div class="card shadow p-2 mb-0 bg-white rounded col-11 mt-3" style="padding: 10px; margin: 0" align="left">
                     <form action="{{route('buscar')}}" method="GET">
                         <div class="row">
                             <div class="dropdown show col-md-2 mb-1">
@@ -96,7 +133,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <main>
+            <div class="container">
+                @include('flash::message')
+            </div>
+            <div class="p-3">
             @yield('content')
+            </div>
         </main>
     </div>
 <div class="col-12" align="center">

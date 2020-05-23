@@ -46,7 +46,7 @@
     </script>
 
 </head>
-<body style="background-color: lightblue">
+<body style="background-image: linear-gradient(to bottom right, red, yellow);">
     <div id="app">
 
         @auth
@@ -77,6 +77,7 @@
                             </a>
                         </div>
                         <a class="btn btn-secondary m-1" href="{{route('admincategorias.index')}}" >Categorias</a>
+                        <a class="btn btn-secondary m-1" href="{{route('adminbanners.index')}}" >Banners</a>
                         @endif
                         <a class="btn btn-secondary m-1" href="{{route('adminpedidos.index')}}" >Pedidos</a>
                             <li class="nav-item dropdown">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BannerModel;
 use App\CategoriaModel;
 use App\PedidoModel;
 use App\ProdutoModel;
@@ -19,7 +20,8 @@ class ClienteController extends Controller
     public function principal()
     {
         $dados = ProdutoModel::orderByRaw('RAND()')->take(12)->get();
-        return view('client.principal', compact('dados'));
+        $banners = BannerModel::all();
+        return view('client.principal', compact('dados'), compact('banners'));
     }
 
 

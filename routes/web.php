@@ -27,6 +27,7 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin', 'HomeController@index')->name('home');
     Route::resource('admincategorias', 'CategoriaAdminController');
+    Route::resource('adminbanners', 'BannerController');
     Route::resource('adminprodutos', 'ProdutoAdminController');
     Route::resource('adminpedidos', 'PedidosAdminController');
     Route::get('admin/usuarios', 'ClienteController@listarUsuarios')->name('usuarios');

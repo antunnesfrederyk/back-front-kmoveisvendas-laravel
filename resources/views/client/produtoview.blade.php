@@ -8,29 +8,69 @@
                 <div class="col-12 mb-2">
                     <h4>{{$produto->nome}}</h4>
                 </div>
+                <div class="col-lg-5 col-sm-12">
+                    <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
 
-                <div class="col-lg-4 col-sm-12 col-12">
-                    <img src="{{asset($produto->foto_um)}}"width="100%">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img class="d-block w-100" src="{{asset($produto->foto_um)}}" alt="Foto 1">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h1></h1>
+                                    <p></p>
+                                </div>
+                            </div>
+                            @if($produto->foto_dois != "fotos/icon_sem_foto.jpg")
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="{{asset($produto->foto_dois)}}" alt="Foto 2">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h1></h1>
+                                    <p></p>
+                                </div>
+                            </div>
+                            @endif
+                            @if($produto->foto_tres != "fotos/icon_sem_foto.jpg")
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="{{asset($produto->foto_tres)}}" alt="Foto 3">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h1></h1>
+                                    <p></p>
+                                </div>
+                            </div>
+                            @endif
+
+                        </div>
+
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Anterior</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Próximo</span>
+                        </a>
+                    </div>
+                    <br>
+                    <div class="w-100" align="center">
+                        <ol class="">
+                            <img class="active p-1" style="background-color: white" data-target="#myCarousel" src="{{asset($produto->foto_um)}}" data-slide-to="0" height="40px" />
+                            @if($produto->foto_dois != "fotos/icon_sem_foto.jpg")
+                                <img class="p-1" style="background-color: white" data-target="#myCarousel" src="{{asset($produto->foto_dois)}}" data-slide-to="1" height="40px" />
+                            @endif
+                            @if($produto->foto_tres != "fotos/icon_sem_foto.jpg")
+                                <img class=" p-1" style="background-color: white" data-target="#myCarousel" src="{{asset($produto->foto_tres)}}" data-slide-to="2" height="40px" />
+                            @endif
+                        </ol>
+                    </div>
+
                 </div>
-                <div class="col-lg-4 col-sm-6 col-6">
-                    @if($produto->foto_dois != "fotos/icon_sem_foto.jpg")
-                    <img src="{{asset($produto->foto_dois)}}" width="100%">
-                    @endif
-                </div>
-                <div class="col-lg-4 col-sm-6 col-6">
-                    @if($produto->foto_tres != "fotos/icon_sem_foto.jpg")
-                    <img src="{{asset($produto->foto_tres)}}"width="100%">
-                    @endif
-                </div>
-                <div class="col-12 pt-2" align="left" style="margin-top: 40px">
+                <div class="col-lg-7 col-sm-12 mt-sm-3" align="left">
                     <h6 align="justify">
                         <?php
                         echo $produto->descricao;;
                         ?>
                     </h6>
-                       <div class="container" style="margin-top: 50px">
-                           <div class="col-lg-8 col-12  float-left">
-
+                       <div class="row mt-5 mb-5">
+                           <div class="col-lg-6 col-sm-12  float-left">
                                @if($produto->disponivel ==1)
                                <h1 style="color: #1b4b72; font-weight: bold">R$ {{$produto->preco}}</h1>
                                <p style="margin: 0; padding: 0; color: grey">Até 10x no cartão</p>
@@ -43,12 +83,11 @@
 
                            </div>
                            @if($produto->disponivel ==1)
-                           <div class="col-lg-4 col-12 float-right">
+                           <div class="col-lg-6 col-sm-12 float-right">
                                <button onclick="quantidade({{$produto->id}}, '{{$produto->nome}}')" data-toggle="modal" data-target="#exampleModal"   class="btn btn-danger" style="width: 100%; margin-bottom: 20px; margin-top: 10px">Adicionar ao Carrinho&nbsp;&nbsp;<i class="fas fa-cart-plus"></i></button>
                            </div>
                                @endif
                        </div>
-
                 </div>
 
                 @auth
