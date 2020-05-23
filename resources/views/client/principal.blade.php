@@ -59,14 +59,8 @@
 
 <script type="text/javascript">
     function quantidade(id, nome) {
-
         document.getElementById("exampleModalLabel").innerHTML = nome;
         document.getElementById("idproduto").value = id;
     }
-
-    $(function () {
-        $("#slide").show();
-        $("#buscar").css("margin-top", "0px");
-    })
 </script>
 @endsection

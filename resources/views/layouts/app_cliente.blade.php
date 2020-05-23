@@ -35,6 +35,7 @@
             </a>
         </nav>
 
+
         <div class="d-none d-lg-block bg-white pt-2 pl-2 fixed-top" id="buscar">
             <form action="{{route('buscar')}}" method="GET">
                 <div class="row">
@@ -73,7 +74,9 @@
         <br>
         <br>
         <br>
-        <div class="row mt-lg-3" style="display: none" id="slide">
+
+        @if(Route::currentRouteName()=="principal")
+        <div class="row mt-lg-3" id="slide">
             <div class="col-12">
                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
@@ -104,6 +107,9 @@
                 </div>
             </div>
         </div>
+            @endif
+
+
 
         <div class="d-lg-none">
             <div align="center" class="container" style="padding: 0">
