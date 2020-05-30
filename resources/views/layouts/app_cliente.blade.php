@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <link rel="shortcut icon" href="{{asset('rede.png')}}" type="image/x-icon">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Vendas Kmóveis</title>
+    <title>K Móveis - Rede Nordeste</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -19,7 +19,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body style="background-image: linear-gradient(to bottom right, red, yellow);">
+<body style="background-color: #ff8600">
     <div id="app">
 
         <nav class="d-lg-none navbar navbar-light bg-white fixed-top">
@@ -30,7 +30,7 @@
             <a href="{{route('carrinho')}}" class="navbar-toggler pt-2 pb-2">
                 <div align="center">
                     <i style="font-size: 15px;" class="fa fa-shopping-cart"></i>
-                    <p class="p-0 pt-1 m-0" style="font-size: 10px">Carrinho</p>
+                    <p class="p-0 pt-1 m-0" style="font-size: 10px">{{\App\Http\Controllers\ClienteController::pegarcarrinhoNotificacao()}}</p>
                 </div>
             </a>
         </nav>
@@ -63,7 +63,7 @@
                         <a href="{{route('carrinho')}}" class="btn btn-lg pt-2 pb-2 float-right">
                             <div align="center" class="btn btn-success text-white">
                                 <i style="font-size: 15px;" class="fa fa-shopping-cart"></i>
-                                <p class="p-0 pt-0 m-0" style="font-size: 10px">Carrinho</p>
+                                <p class="p-0 pt-0 m-0" style="font-size: 10px">{{\App\Http\Controllers\ClienteController::pegarcarrinhoNotificacao()}}</p>
                             </div>
                         </a>
                     </div>
@@ -151,10 +151,10 @@
         </main>
     </div>
 <div class="col-12" align="center">
-    <p>Dúvidas?&nbsp;&nbsp;&nbsp;<a href="https://api.whatsapp.com/send?phone=5583999900364&text=Olá! Estou com uma dúvida!" class="btn btn-primary">Clique aqui</a></p>
-    <p style="margin: 0; padding: 0"><strong>Endereço: </strong>Rua Cel. Marcolino Pereira Lima</p>
-    <p style="margin: 0; padding: 0"><strong></strong>Centro, Princesa Isabel-PB</p>
-    <p style="margin: 0; padding: 0"><strong>Contatos: </strong>(83) 3457-2894 / (83)99990-0364</p>
+    <p style="color: white">Dúvidas?&nbsp;&nbsp;&nbsp;<a href="https://api.whatsapp.com/send?phone=5583999900364&text=Olá! Estou com uma dúvida!" class="btn btn-danger">Clique aqui</a></p>
+    <p style="margin: 0; padding: 0; color: white"><strong>Endereço: </strong>Rua Cel. Marcolino Pereira Lima</p>
+    <p style="margin: 0; padding: 0; color: white"><strong></strong>Centro, Princesa Isabel-PB</p>
+    <p style="margin: 0; padding: 0; color: white"><strong>Contatos: </strong>(83) 3457-2894 / (83)99990-0364</p>
     <p style="color: grey">2020 © atdsistemas.com.br</p>
 </div>
 </body>

@@ -46,7 +46,7 @@
     </script>
 
 </head>
-<body style="background-image: linear-gradient(to bottom right, red, yellow);">
+<body  style="background-color: #ff8600">
     <div id="app">
 
         @auth

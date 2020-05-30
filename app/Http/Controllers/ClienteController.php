@@ -154,6 +154,24 @@ class ClienteController extends Controller
         }
     }
 
+    public static function pegarcarrinhoNotificacao(){
+        if(isset($_SESSION['carrinho'])){
+            $qtd = count($_SESSION['carrinho']);
+            if ($qtd>0){
+                if($qtd>1){
+                    return $qtd . " Itens";
+                }else{
+                    return $qtd . " Item";
+                }
+
+            }else{
+                return "Vazio";
+            }
+        } else{
+            return "Vazio";
+        }
+    }
+
     public static function pegartotal(){
         $total=0.00;
         //session_start();
