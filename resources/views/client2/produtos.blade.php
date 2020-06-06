@@ -22,25 +22,23 @@
                                 </div>
 
                                             <div class="card-body" style="padding: 5px;">
-                                                <p style="margin: 0; padding: 0; font-size: 30px; color: darkslategray; font-weight: bold">R$ {{$produto->preco}}</p>
                                                 @if($produto->disponivel == 1)
-                                                    <p style="margin: 0; padding: 0; color: grey">Até 10x no cartão</p>
-                                                    <p style="margin: 0; padding: 0; color: grey">1+5 Crediário</p>
-                                                    <p style="margin: 0; padding: 0; color: grey">À vista</p>
-                                                    @endif
-                                                @else
-                                                    <span class="badge badge-danger">Indisponível</span>
-                                                    <p style="color: grey">Realize seu pedido e aguarde entrega.</p>
+                                                <p style="margin: 0; padding: 0; font-size: 30px; color: darkslategray; font-weight: bold">R$ {{$produto->preco}}</p>
+                                    <p style="margin: 0; padding: 0; color: grey">Até 10x no cartão</p>
+                                    <p style="margin: 0; padding: 0; color: grey">1+5 Crediário</p>
+                                    <p style="margin: 0; padding: 0; color: grey">À vista</p>
+                                                    @else
+                                                    <p style="margin: 0; padding: 0; color: darkslategray; height: 117px; padding: 5px">Ops! Já vendemos todo o estoque.</p>
                                                 @endif
                                 </div>
                                 </a>
-                                        <div class="card-footer" align="center" style="padding: 5px">
-                                            @if($produto->disponivel == 1)
-                                                <button onclick="quantidade({{$produto->id}}, '{{$produto->nome}}')" data-toggle="modal" data-target="#exampleModal"   class="btn btn-danger" style="width: 100%">Adicionar &nbsp;&nbsp;<i class="fas fa-cart-plus"></i></button>
-                                            @else
-                                                <a href="https://api.whatsapp.com/send?phone=5583999900364&text=*K Móveis*%0a%0aTenho interesse em:%0a{{$produto->nome}} - ({{$produto->codigosistema}})%0a%0a" class="btn btn-outline-danger" style="width: 100%">Tenho Interesse&nbsp;&nbsp;&nbsp;<i class="fab fa-whatsapp"></i></a>
-                                            @endif
-                                        </div>
+                                <div class="card-footer" align="center" style="padding: 5px">
+                                    @if($produto->disponivel == 1)
+                                        <button onclick="quantidade({{$produto->id}}, '{{$produto->nome}}')" data-toggle="modal" data-target="#exampleModal"   class="btn btn-danger" style="width: 100%">Adicionar &nbsp;&nbsp;<i class="fas fa-cart-plus"></i></button>
+                                    @else
+                                        <a href="https://api.whatsapp.com/send?phone=5583999900364&text=*K Móveis*%0a%0aTenho interesse em:%0a{{$produto->nome}} - ({{$produto->codigosistema}})%0a%0a" class="btn btn-outline-danger" style="width: 100%">Tenho Interesse&nbsp;&nbsp;&nbsp;<i class="fab fa-whatsapp"></i></a>
+                                    @endif
+                                </div>
                             </div>
                     </div>
                     @endforeach
@@ -59,16 +57,16 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="formularioqtd" action="{{route("addcart")}}" method="post">
+                <form action="{{route("addcart")}}" method="post">
                     <div class="modal-body">
                         @csrf
                         <input type="hidden" id="idproduto" name="id">
                         <label>Quantidade</label>
-                        <input type="number" class="form-control" id="qtd" min="0" name="qtd" value="1">
+                        <input type="number" class="form-control" id="qtd" name="qtd" value="1">
                     </div>
                     <div class="modal-footer">
-                        <button id="btncanc" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                        <button id="btnadd" onclick="disable()" type="submit" class="btn btn-success">Adicionar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Adicionar</button>
                     </div>
                 </form>
             </div>
@@ -80,12 +78,6 @@
 
             document.getElementById("exampleModalLabel").innerHTML = nome;
             document.getElementById("idproduto").value = id;
-        }
-        function disable() {
-            document.getElementById("btnadd").innerHTML = "Adicionando...";
-            document.getElementById("btnadd").disabled = true;
-            document.getElementById("btncanc").style.display = "none";
-            document.getElementById("formularioqtd").submit();
         }
     </script>
 @endsection

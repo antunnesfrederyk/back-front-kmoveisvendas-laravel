@@ -4,12 +4,11 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="{{asset("logo.png")}}" type="image/x-icon">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>K Móveis - Gerenciamento</title>
+    <title>Vendas Kmóveis</title>
 
     <!-- Scripts --><!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" ></script>
@@ -55,7 +54,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/admin') }}">
-                   <img src="{{asset("brasao.png")}}" height="30px" class="mr-2"/>K Móveis - Gerenciamento
+                   Vendas K Móveis
                 </a>
 
 
@@ -72,11 +71,15 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @if(strstr(\Illuminate\Support\Facades\Auth::user()->email, '@') != "@vendas.com.br")
-                        <a class="btn btn-secondary m-1" href="{{route('adminprodutos.index')}}" >Produtos</a>
+                        <div class="dropdown show m-1">
+                            <a class="btn btn-secondary w-100 h-100 dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Produtos
+                            </a>
+                        </div>
                         <a class="btn btn-secondary m-1" href="{{route('admincategorias.index')}}" >Categorias</a>
                         <a class="btn btn-secondary m-1" href="{{route('adminbanners.index')}}" >Banners</a>
                         @endif
-                        <a class="btn btn-danger m-1" href="{{route('adminpedidos.index')}}" >Pedidos <span class="badge badge-warning">{{\App\PedidoModel::all()->where('status', 0)->count()}}</span></a>
+                        <a class="btn btn-secondary m-1" href="{{route('adminpedidos.index')}}" >Pedidos</a>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -110,10 +113,5 @@
             @yield('content')
         </main>
     </div>
-    <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-    </script>
 </body>
 </html>

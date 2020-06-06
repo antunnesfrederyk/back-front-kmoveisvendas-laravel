@@ -10,6 +10,7 @@
                 </div>
                 <div class="col-lg-5 col-sm-12">
                     <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <img class="d-block w-100" src="{{asset($produto->foto_um)}}" alt="Foto 1">
@@ -51,15 +52,16 @@
                     <br>
                     <div class="w-100" align="center">
                         <ol class="">
-                            <img class="active p-1" style="background-color: white; border-width: 1px; border-color: grey;" data-target="#myCarousel" src="{{asset($produto->foto_um)}}" data-slide-to="0" height="40px" />
+                            <img class="active p-1" style="background-color: white" data-target="#myCarousel" src="{{asset($produto->foto_um)}}" data-slide-to="0" height="40px" />
                             @if($produto->foto_dois != "fotos/icon_sem_foto.jpg")
-                                <img class="p-1" style="background-color: white; border-width: 1px; border-color: grey" data-target="#myCarousel" src="{{asset($produto->foto_dois)}}" data-slide-to="1" height="40px" />
+                                <img class="p-1" style="background-color: white" data-target="#myCarousel" src="{{asset($produto->foto_dois)}}" data-slide-to="1" height="40px" />
                             @endif
                             @if($produto->foto_tres != "fotos/icon_sem_foto.jpg")
-                                <img class=" p-1" style="background-color: white; border-width: 1px; border-color: grey" data-target="#myCarousel" src="{{asset($produto->foto_tres)}}" data-slide-to="2" height="40px" />
+                                <img class=" p-1" style="background-color: white" data-target="#myCarousel" src="{{asset($produto->foto_tres)}}" data-slide-to="2" height="40px" />
                             @endif
                         </ol>
                     </div>
+
                 </div>
                 <div class="col-lg-7 col-sm-12 mt-sm-3" align="left">
                     <h6 align="justify">
@@ -69,22 +71,26 @@
                     </h6>
                        <div class="row mt-5 mb-5">
                            <div class="col-lg-6 col-sm-12  float-left">
+                               @if($produto->disponivel ==1)
                                <h1 style="color: #1b4b72; font-weight: bold">R$ {{$produto->preco}}</h1>
-                               @if($produto->disponivel == 1)
-                                   <p style="margin: 0; padding: 0; color: grey">Até 10x no cartão</p>
-                                   <p style="margin: 0; padding: 0; color: grey">1+5 Crediário</p>
-                                   <p style="margin: 0; padding: 0; color: grey">À vista</p>
-                               @else
-                                   <span class="badge badge-danger">Indisponível</span>
-                                   <p style="color: grey">Realize seu pedido e aguarde entrega.</p>
-                                   <p style="color: grey">*O Preço pode variar.</p>
+                               <p style="margin: 0; padding: 0; color: grey">Até 10x no cartão</p>
+                               <p style="margin: 0; padding: 0; color: grey">1+5 Crediário</p>
+                               <p style="margin: 0; padding: 0; color: grey">À vista</p>
+                                   @else
+                                   <p style="margin: 0; padding: 0; color: darkslategray; height: 117px; padding: 5px">Ops! Já vendemos todo o estoque.</p>
+
                                @endif
 
                            </div>
-                           @if($produto->disponivel == 1)
-                               <button onclick="quantidade({{$produto->id}}, '{{$produto->nome}}')" data-toggle="modal" data-target="#exampleModal"   class="btn btn-danger" style="width: 100%">Adicionar &nbsp;&nbsp;<i class="fas fa-cart-plus"></i></button>
-                           @else
-                               <a href="https://api.whatsapp.com/send?phone=5583999900364&text=*K Móveis*%0a%0aTenho interesse em:%0a{{$produto->nome}} - ({{$produto->codigosistema}})%0a%0a" class="btn btn-outline-danger" style="width: 100%">Tenho Interesse&nbsp;&nbsp;&nbsp;<i class="fab fa-whatsapp"></i></a>
+                           @if($produto->disponivel ==1)
+                           <div class="col-lg-6 col-sm-12 float-right">
+                               <button onclick="quantidade({{$produto->id}}, '{{$produto->nome}}')" data-toggle="modal" data-target="#exampleModal"   class="btn btn-danger" style="width: 100%; margin-bottom: 20px; margin-top: 10px">Adicionar ao Carrinho&nbsp;&nbsp;<i class="fas fa-cart-plus"></i></button>
+                           </div>
+
+                               @else
+                               <div class="col-lg-6 col-sm-12 float-right">
+                                <a href="https://api.whatsapp.com/send?phone=5583999900364&text=*K Móveis*%0a%0aTenho interesse em:%0a{{$produto->nome}} - ({{$produto->codigosistema}})%0a%0a" class="btn btn-outline-danger" style="width: 100%">Tenho Interesse&nbsp;&nbsp;&nbsp;<i class="fab fa-whatsapp"></i></a>
+                               </div>
                            @endif
                        </div>
                 </div>
@@ -135,16 +141,16 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="formularioqtd" action="{{route("addcart")}}" method="post">
+                <form action="{{route("addcart")}}" method="post">
                     <div class="modal-body">
                         @csrf
                         <input type="hidden" id="idproduto" name="id">
                         <label>Quantidade</label>
-                        <input type="number" class="form-control" id="qtd"  min="0" name="qtd" value="1">
+                        <input type="number" class="form-control" id="qtd" name="qtd" value="1">
                     </div>
                     <div class="modal-footer">
-                        <button id="btncanc" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                        <button id="btnadd" onclick="disable()" type="submit" class="btn btn-success">Adicionar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Adicionar</button>
                     </div>
                 </form>
             </div>
@@ -156,12 +162,6 @@
 
             document.getElementById("exampleModalLabel").innerHTML = nome;
             document.getElementById("idproduto").value = id;
-        }
-        function disable() {
-            document.getElementById("btnadd").innerHTML = "Adicionando...";
-            document.getElementById("btnadd").disabled = true;
-            document.getElementById("btncanc").style.display = "none";
-            document.getElementById("formularioqtd").submit();
         }
     </script>
 @endsection

@@ -7,8 +7,10 @@ use App\CategoriaModel;
 use App\PedidoModel;
 use App\ProdutoModel;
 use App\User;
+use Carbon\Traits\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use function Sodium\add;
 
 
 
@@ -48,19 +50,15 @@ class ClienteController extends Controller
     {
         $id = $request['id'];
         $qtd = $request['qtd'];
+        $dado = ProdutoModel::findOrFail($id);
         session_start();
-
-
         if(isset($_SESSION['carrinho'])){
-            if(isset($_SESSION['carrinho'][$id])){
-//                return $_SESSION['carrinho'][$id];
-                $_SESSION['carrinho'][$id] += $qtd;
-            }else{
-                $_SESSION['carrinho'][$id] =  $qtd;
-            }
+            array_push($_SESSION['carrinho'], [$id, $qtd]);
+            $_SESSION['total'] += (str_replace(',', '.', str_replace('.', '', $dado->preco)) * str_replace(',', '.', $qtd));
         }else{
-            $_SESSION['carrinho'] = [];
-            $_SESSION['carrinho'] [$id] = $qtd;
+            $_SESSION['total'] = (str_replace(',', '.', str_replace('.', '', $dado->preco)) * str_replace(',', '.', $qtd));
+            $_SESSION['carrinho'] = array();
+            array_push($_SESSION['carrinho'], [$id, $qtd]);
         }
         flash("Item Adicionado")->success();
         return redirect()->route('carrinho');
@@ -70,24 +68,21 @@ class ClienteController extends Controller
     public function removecart($id, $qtd)
     {
         session_start();
-        if ($qtd==0){
-            unset($_SESSION['carrinho'][$id]);
-            flash("Item Removido")->success();
-        }else{
-            $_SESSION['carrinho'][$id] = $qtd;
-            flash("Quantidade Alterada")->success();
+        foreach ($_SESSION['carrinho'] as $car){
+            if($car[0]==$id){
+                $pos = array_search([$id, $qtd], $_SESSION['carrinho']);
+                unset($_SESSION['carrinho'][$pos]);
+            }
         }
-
+        $dado = ProdutoModel::findOrFail($id);
+        $_SESSION['total'] -= (str_replace(',', '.', str_replace('.', '', $dado->preco)) * str_replace(',', '.', $qtd));
+        flash("Item Removido")->success();
         return redirect()->route('carrinho');
     }
 
     public function carrinho()
     {
-
-        $total = self::pegartotalContavel();
-
-//        $total = 10.00;
-        return view('client.carrinho', compact('total'));
+        return view('client.carrinho');
     }
 
     public function enviar(Request $request)
@@ -103,8 +98,6 @@ class ClienteController extends Controller
         $retirar = $request['retirar'];
         $obs = $request['obs'];
         $pagamento = $request['pagamento'];
-//        $profissional = $request['profissional'];
-//        $irmaos = $request['irmaos'];
         $parc_cart = $request['parc_cartao'];
         $parc_cred = $request['parc_cred'];
         $troco = $request['troco'];
@@ -124,22 +117,14 @@ class ClienteController extends Controller
         }
 
         $itens = "";
-        $texto = "🛍 *NOVO PEDIDO*%0aK Móveis%0a".$cupom."%0a%0a👤 *Cliente:* ".$nome."%0a%f0%9f%93%8d _".$endereco. "_%0a".$telefone."%0a%0a📦 *Produtos*%0a------------------------%0a";
-
-//        $ino = "[ Não faz parte. ]";
-//        if ($irmaos=="sim"){
-//            $ino = "[ ".$profissional .". ]";
-//        }
-
-        foreach ( $_SESSION['carrinho'] as $id => $qtd){
-            $dado = ProdutoModel::findOrFail($id);
-            $texto = $texto . "%e2%80%a2%20" . $dado->codigosistema ."%0a".  $dado->nome."%0aQtd: ". $qtd . "%0aR$ ".$dado->preco ."%0a%0a";
-            $itens = $itens . " (".$dado->codigosistema." - ".  $qtd .'x '. $dado->nome ." - ".$dado->preco.") ";
+        $texto = "🛍 *NOVO PEDIDO* - K Móveis%0a".$cupom."%0a%0a👤 *Cliente:* ".$nome."%0a%f0%9f%93%8d _".$endereco. "_%0a".$telefone."0a%0a📦 *Produtos*%0a------------------------%0a";
+        foreach ( $_SESSION['carrinho'] as $item){
+            $dado = ProdutoModel::findOrFail($item[0]);
+            $texto = $texto . "%e2%80%a2%20" . $dado->codigosistema ."%0a". explode(" ", $dado->nome)[0]." ". explode(" ", $dado->nome)[1]  ."%0aQtd: ". $item[1] . "%0aR$ ".$dado->preco ."%0a%0a";
+            $itens = $itens . " (".$dado->codigosistema." - ".  $item[1] .'x '.explode(" ", $dado->nome)[0]." ". explode(" ", $dado->nome)[1]." - ".$dado->preco.") ";
         }
 
-        $texto = $texto . "------------------------%0a*Total:* R$ ".self::pegartotal()." %0a------------------------%0a💳 *Forma de Pagamento:* ".$pagamento."%0a" . $detalhespay ."%0a%0a*CUPOM: " . $cupom . "%0aObservações:* ".$obs ."%0a------------------------%0a". date('d/m/Y h:i:s A');
-
-
+        $texto = $texto . "------------------------%0a*Total:* R$ ".self::pegartotal()." %0a------------------------%0a💳 *Forma de Pagamento:* ".$pagamento."%0a" . $detalhespay ."%0a%0a*Observações:* ".$obs ."%0a------------------------%0a". date('d/m/Y h:i:s A');
 
         $pedido->cliente = $nome;
         $pedido->entrega = $endereco;
@@ -149,11 +134,9 @@ class ClienteController extends Controller
         $pedido->cupom = $cupom;
         $pedido->total = self::pegartotal();
         $pedido->itens = $itens;
-        $pedido->save();
 
-        $url = 'https://api.whatsapp.com/send?phone=5583999900364&text='. $texto;
-        return view('client.finish', compact('url'));
-//        return redirect(url('https://api.whatsapp.com/send?phone='.DadosCliente::$telefone_loja.'&text='. $texto));
+        $pedido->save();
+        return redirect(url('https://api.whatsapp.com/send?phone=5583999900364&text='. $texto));
     }
 
     public function limpar()
@@ -191,37 +174,20 @@ class ClienteController extends Controller
 
     public static function pegartotal(){
         $total=0.00;
-        foreach ( $_SESSION['carrinho'] as $id => $qtd){
-            $dado = ProdutoModel::findOrFail($id);
-            $total += (str_replace(',', '.', str_replace('.', '', $dado->preco)) * str_replace(',', '.', $qtd));
+        //session_start();
+        foreach ( $_SESSION['carrinho'] as $item){
+            $dado = ProdutoModel::findOrFail($item[0]);
+            $total += (str_replace(',', '.', str_replace('.', '', $dado->preco)) * str_replace(',', '.', $item[1]));
         }
-        return number_format($total, 2, ',', '.');
-//        return number_format($_SESSION['total'], 2, ',', '.');
-    }
-
-    public static function pegartotalContavel(){
-        $total=0.00;
-        session_start();
-
-
-
-        if(isset($_SESSION['carrinho'])){
-            foreach ( $_SESSION['carrinho'] as $id => $qtd){
-                $dado = ProdutoModel::findOrFail($id);
-//                return $dado;
-                $total += (str_replace(',', '.', str_replace('.', '', $dado->preco)) * str_replace(',', '.', $qtd));
-            }
-        }
-
-
-        return number_format($total, 2, '.', '');
-//        return number_format($_SESSION['total'], 2, ',', '.');
+        return number_format($_SESSION['total'], 2, ',', '.');
     }
 
 
 
     public function listarUsuarios(){
         $dados = User::all();
+
+//        return $dados;
          return view('admin.usuarios_list', compact('dados'));
     }
 
@@ -230,7 +196,6 @@ class ClienteController extends Controller
         $dado->status = $request['status'];
         $dado->id_user = Auth::user()->id;
         $dado->save();
-        flash("Status Alterado com Sucesso")->success();
         return redirect()->route('adminpedidos.index');
     }
 }
